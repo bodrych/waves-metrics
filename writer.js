@@ -29,6 +29,7 @@ const checkPool = async () => {
 			],
 			{
 				retentionPolicy: '1h',
+				precision: 'ms',
 			}
 		);
 	} catch (e) {
