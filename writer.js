@@ -11,13 +11,20 @@ const influx = new Influx.InfluxDB({
 				size: Influx.FieldType.INTEGER,
 			},
 			tags: [],
+		},
+		{
+			measurement: 'peers',
+			fields: {
+				amount: Influx.FieldType.INTEGER,
+			},
+			tags: [],
 		}
 	]
 });
 
 const checkPool = async () => {
 	try {
-		const response = await axios.get('https://nodes.wavesnodes.com/transactions/unconfirmed/size');
+		const response = await axios.get('http://localhost:6869/transactions/unconfirmed/size');
 		await influx.writePoints(
 			[
 				{
@@ -29,7 +36,6 @@ const checkPool = async () => {
 			],
 			{
 				retentionPolicy: '1h',
-				// precision: 'ms',
 			}
 		);
 	} catch (e) {
@@ -37,4 +43,28 @@ const checkPool = async () => {
 	}
 }
 
-setInterval(checkPool, 5000);
+const checkPeers = async () => {
+	try {
+		const response = await axios.get('http://localhost:6869/peers/connected');
+		await influx.writePoints(
+			[
+				{
+					measurement: 'peers',
+					fields: {
+						amount: +response.data.peers.length,
+					},
+				}
+			],
+			{
+				retentionPolicy: '2d',
+			}
+		);
+	} catch (e) {
+		console.log(e);
+	}
+}
+
+checkPool();
+setInterval(checkPool, 5* 1000);
+checkPeers();
+setInterval(checkPeers, 5 * 60 * 1000);
