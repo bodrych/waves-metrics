@@ -17,13 +17,13 @@ const influx = new Influx.InfluxDB({
 
 const checkPool = async () => {
 	try {
-		const size = (await axios.get('https://nodes.wavesnodes.com/transactions/unconfirmed/size')).size;
+		const data = await axios.get('https://nodes.wavesnodes.com/transactions/unconfirmed/size');
 		await influx.writePoints(
 			[
 				{
 					measurement: 'pool',
 					fields: {
-						size,
+						size: +data.size,
 					},
 				}
 			],
