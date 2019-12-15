@@ -28,7 +28,13 @@ http.createServer(app).listen(3000, function() {
 	console.log('Listening on port 3000')
 })
 
-app.get('/', async (req, res) => {
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
+app.get('/pool', async (req, res) => {
 	try {
 		const result = await influx.query(
 			`select * from "1w".downsampled_pool`,
