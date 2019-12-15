@@ -45,7 +45,7 @@ app.get('/pool', async (req, res) => {
 		const data = _.map(result, (value) => {
 			return [ Date.parse(value['time']), value['mean_size'] ]
 		})
-		res.json({ data });
+		res.json(data);
 	} catch (e) {
 		res.status(500).send(err.stack)
 	}
