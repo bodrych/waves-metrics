@@ -19,13 +19,14 @@
           chart: {
             type: 'areaspline',
             zoomType: 'x',
+            panning: true,
+            panKey: 'shift',
           },
           title: {
             text: 'Waves Unconfirmed Transactions Pool Size - Time Series'
           },
           subtitle: {
-            text: document.ontouchstart === undefined ?
-              'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+            text: document.ontouchstart === undefined ? 'Click and drag to zoom in. Hold down shift key to pan.' : 'Pinch the chart to zoom in'
           },
           credits: {
               enabled: false
@@ -53,6 +54,8 @@
             },
             buttons: {
               contextButton: {
+                // symbol: null,
+                // text: 'test',
                 menuItems: [
                   "update",
                   "viewFullscreen",
