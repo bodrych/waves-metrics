@@ -9,7 +9,7 @@ export default new Vuex.Store({
 		poolData: [],
 	},
 	mutations: {
-		setPoolData: (state, value) => state.poolData.push(value),
+		setPoolData: (state, value) => state.poolData = value,
 	},
 	actions: {
 		fetchPoolData: async ({ commit }) => {
