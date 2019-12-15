@@ -1,5 +1,6 @@
 const Influx = require('influx');
-const http = require('http')
+const http = require('http');
+const _ = require('lodash');
 const app = require('express')();
 
 const influx = new Influx.InfluxDB({
@@ -35,7 +36,10 @@ app.get('/', async (req, res) => {
 				precision: 'ms',
 			}
 		);
-		res.json(result);
+		const data = _.map(result, (value) => {
+			return [ Date.parse(value['time']), value['mean_size'] ]
+		})
+		res.json(data);
 	} catch (e) {
 		res.status(500).send(err.stack)
 	}
