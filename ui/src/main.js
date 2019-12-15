@@ -4,6 +4,14 @@ import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
 import HighchartsVue from 'highcharts-vue'
+import Highcharts from 'highcharts'
+import exportingInit from 'highcharts/modules/exporting'
+// import dataInit from 'highcharts/modules/data'
+// import exportDataInit from 'highcharts/modules/export-data'
+
+exportingInit(Highcharts)
+// dataInit(Highcharts)
+// exportDataInit(Highcharts)
 
 Vue.config.productionTip = false
 

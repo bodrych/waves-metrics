@@ -1,7 +1,11 @@
 <template>
-  <div>
-    <Chart/>
-  </div>
+	<v-container>
+		<v-row>
+			<v-col>
+				<Chart/>
+			</v-col>
+		</v-row>
+	</v-container>
 </template>
 
 <script>

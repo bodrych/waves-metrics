@@ -1,8 +1,9 @@
 <template>
-  <div>
-    <highcharts class="chart" :options="chartOptions" :updateArgs="updateArgs"></highcharts>
-    {{ getPoolData }}
-    </div>
+  <v-card>
+    <v-card-text>
+      <highcharts class="chart" :options="chartOptions" :updateArgs="updateArgs"></highcharts>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>
@@ -20,7 +21,14 @@
             zoomType: 'x',
           },
           title: {
-            text: 'Waves UTX-pool size chart'
+            text: 'Waves Unconfirmed Transactions Pool Size - Time Series'
+          },
+          subtitle: {
+            text: document.ontouchstart === undefined ?
+              'Click and drag in the plot area to zoom in' : 'Pinch the chart to zoom in'
+          },
+          credits: {
+              enabled: false
           },
           legend: {
             enabled: false
@@ -31,6 +39,30 @@
           yAxis: {
             title: {
               text: 'Pool size'
+            },
+            min: 0,
+          },
+          exporting: {
+            menuItemDefinitions: {
+              update: {
+                text: 'Update',
+                onclick: () => {
+                  this.fetchPoolData();
+                },
+              }
+            },
+            buttons: {
+              contextButton: {
+                menuItems: [
+                  "update",
+                  "viewFullscreen",
+                  "printChart",
+                  "downloadPNG",
+                  "downloadJPEG",
+                  "downloadPDF",
+                  "downloadSVG",
+                ]
+              }
             }
           },
           plotOptions: {
@@ -60,13 +92,14 @@
             }
           },
           series: [{
+            name: 'Pool size',
             data: [],
             color: '#0055ff'
           }]
         }
       }
     },
-    created () {
+    mounted () {
       this.fetchPoolData();
     },
     computed: {
@@ -76,7 +109,7 @@
       title (newValue) {
         this.chartOptions.title.text = newValue
       },
-      points (newValue) {
+      getPoolData (newValue) {
         this.chartOptions.series[0].data = newValue
       },
     },
