@@ -24,7 +24,7 @@ const influx = new Influx.InfluxDB({
 
 const checkPool = async () => {
 	try {
-		const response = await axios.get('https://nodes.wavesnodes.com/transactions/unconfirmed/size');
+		const response = await axios.get('http://localhost:6869/transactions/unconfirmed/size');
 		await influx.writePoints(
 			[
 				{
