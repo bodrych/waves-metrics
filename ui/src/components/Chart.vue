@@ -53,6 +53,12 @@
               }
             },
             buttons: {
+              // update: {
+              //   text: 'Update',
+              //   onclick: () => {
+              //     this.fetchPoolData();
+              //   },
+              // },
               contextButton: {
                 // symbol: null,
                 // text: 'test',

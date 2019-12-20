@@ -43,28 +43,28 @@ const checkPool = async () => {
 	}
 }
 
-// const checkPeers = async () => {
-// 	try {
-// 		const response = await axios.get('https://nodes.wavesnodes.com/peers/connected');
-// 		await influx.writePoints(
-// 			[
-// 				{
-// 					measurement: 'peers',
-// 					fields: {
-// 						amount: +response.data.peers.length,
-// 					},
-// 				}
-// 			],
-// 			{
-// 				retentionPolicy: '2d',
-// 			}
-// 		);
-// 	} catch (e) {
-// 		console.log(e);
-// 	}
-// }
+const checkPeers = async () => {
+	try {
+		const response = await axios.get('http://10.7.96.3:3000/api/status');
+		await influx.writePoints(
+			[
+				{
+					measurement: 'peers',
+					fields: {
+						amount: response.data.active_peers_count,
+					},
+				}
+			],
+			{
+				retentionPolicy: '2h',
+			}
+		);
+	} catch (e) {
+		console.log(e);
+	}
+}
 
 checkPool();
-setInterval(checkPool, 5* 1000);
-// checkPeers();
-// setInterval(checkPeers, 5 * 60 * 1000);
+setInterval(checkPool, 10 * 1000);
+checkPeers();
+setInterval(checkPeers, 5 * 60 * 1000);

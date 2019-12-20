@@ -50,3 +50,20 @@ app.get('/pool', async (req, res) => {
 		res.status(500).send(err.stack)
 	}
 })
+
+app.get('/peers', async (req, res) => {
+	try {
+		const result = await influx.query(
+			`select * from "13w".downsampled_peers`,
+			{
+				precision: 'ms',
+			}
+		);
+		const data = _.map(result, (value) => {
+			return [ Date.parse(value['time']), value['mean_amount'] ]
+		})
+		res.json(data);
+	} catch (e) {
+		res.status(500).send(err.stack)
+	}
+})
