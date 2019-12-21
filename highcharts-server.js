@@ -16,7 +16,7 @@ app.use(function(req, res, next) {
 });
 
 app.get('*', async (req, res) => {
-  const data = await axios.get('http://localhost:3000/')
+  const response = await axios.get('http://localhost:3000/')
   const data = response.data;
   var exportSettings = {
     options: {
