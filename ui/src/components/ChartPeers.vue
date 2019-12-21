@@ -21,15 +21,18 @@
             zoomType: 'x',
             panning: true,
             panKey: 'shift',
+            fontFamily: '\'Roboto\', sans-serif',
           },
           title: {
-            text: 'Waves Unconfirmed Transactions Pool Size - Time Series'
+            text: 'Total number of nodes'
           },
           subtitle: {
-            text: document.ontouchstart === undefined ? 'Click and drag to zoom in. Hold down shift key to pan.' : 'Pinch the chart to zoom in'
+            text: ''
           },
           credits: {
-              enabled: false
+              enabled: true,
+              href: 'https://metrics.badr.dev',
+              text: 'metrics.badr.dev'
           },
           legend: {
             enabled: false
@@ -39,7 +42,7 @@
           },
           yAxis: {
             title: {
-              text: 'Pool size'
+              text: 'Total nodes'
             },
             min: 0,
           },
@@ -48,7 +51,7 @@
               update: {
                 text: 'Update',
                 onclick: () => {
-                  this.fetchPoolData();
+                  this.fetchPeersData();
                 },
               }
             },
@@ -84,8 +87,8 @@
                   y2: 1
                 },
                 stops: [
-                [0, 'rgba(0, 85, 255, 1)'],
-                [1, 'rgba(0, 85, 255, 0)'],
+                [0, 'rgba(66, 165, 245, 1)'],
+                [1, 'rgba(66, 165, 245, 0)'],
                 ]
               },
               marker: {
@@ -101,29 +104,30 @@
             }
           },
           series: [{
-            name: 'Pool size',
+            name: 'Total nodes',
             data: [],
-            color: '#0055ff'
+            color: 'rgba(66, 165, 245, 1)'
           }]
         }
       }
     },
     mounted () {
-      this.fetchPoolData();
+      this.fetchPeersData();
     },
     computed: {
-      ...mapGetters([ 'getPoolData' ]),
+      ...mapGetters([ 'getPeersData' ]),
     },
     watch: {
       title (newValue) {
         this.chartOptions.title.text = newValue
       },
-      getPoolData (newValue) {
+      getPeersData (newValue) {
         this.chartOptions.series[0].data = newValue
+        // this.chartOptions.subtitle.text = `${(new Date(newValue[0][0])).toUTCString()} - ${(new Date(newValue[newValue.length-1][0])).toUTCString()}`;
       },
     },
     methods: {
-      ...mapActions([ 'fetchPoolData' ]),
+      ...mapActions([ 'fetchPeersData' ]),
     }
   }
 </script>

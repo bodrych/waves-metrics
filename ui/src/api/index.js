@@ -10,3 +10,11 @@ export const fetchPoolData = async () => {
 		return [];
 	}
 }
+export const fetchPeersData = async () => {
+	try {
+		const response = await axios.get(apiBase + 'peers');
+		return response.data;
+	} catch (e) {
+		return [];
+	}
+}

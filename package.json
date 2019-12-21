@@ -11,6 +11,7 @@
   "dependencies": {
     "axios": "^0.19.0",
     "express": "^4.17.1",
+    "highcharts-export-server": "^2.0.24",
     "influx": "^5.5.1",
     "lodash": "^4.17.15"
   }
