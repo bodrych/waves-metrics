@@ -1,13 +1,12 @@
 <template>
-	<v-container>
+	<v-container fluid>
 		<v-row>
-			<v-col>
-				<v-card>
-					<v-card-text>
-						<p>Welcome to the Waves Metrics!</p>
-						<p class="mb-0">{{ tooltip }}</p>
-					</v-card-text>
-				</v-card>
+			<v-col class="text-center">
+				<!-- <v-card> -->
+					<!-- <v-card-text> -->
+						<span class="overline">{{ tooltip }}</span>
+					<!-- </v-card-text> -->
+				<!-- </v-card> -->
 			</v-col>
 		</v-row>
 		<v-row>

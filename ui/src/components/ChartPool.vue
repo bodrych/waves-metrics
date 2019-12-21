@@ -21,7 +21,19 @@
             zoomType: 'x',
             panning: true,
             panKey: 'shift',
-            fontFamily: '\'Roboto\', sans-serif',
+            style: {
+              fontFamily: '\'Roboto\', sans-serif',
+            },
+            resetZoomButton: {
+              position: {
+                align: 'left',
+                // verticalAlign: 'top',
+                x: 0,
+                y: 0
+              },
+              relativeTo: 'chart',
+            },
+            // height: 600,
           },
           title: {
             text: 'Unconfirmed Transactions Pool Size'
@@ -56,12 +68,6 @@
               }
             },
             buttons: {
-              // update: {
-              //   text: 'Update',
-              //   onclick: () => {
-              //     this.fetchPoolData();
-              //   },
-              // },
               contextButton: {
                 // symbol: null,
                 // text: 'test',
@@ -73,10 +79,19 @@
                   "downloadJPEG",
                   "downloadPDF",
                   "downloadSVG",
-                ]
+                ],
+                // x: 0,
+                // y: 0,
               }
             }
           },
+          // navigation: {
+          //   buttonOptions: {
+          //     align: 'right',
+          //     y: -5,
+          //     x: 10
+          //   },
+          // },
           plotOptions: {
             areaspline: {
               fillColor: {

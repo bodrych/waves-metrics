@@ -21,7 +21,19 @@
             zoomType: 'x',
             panning: true,
             panKey: 'shift',
-            fontFamily: '\'Roboto\', sans-serif',
+            style: {
+              fontFamily: '\'Roboto\', sans-serif',
+            },
+            resetZoomButton: {
+              position: {
+                align: 'left',
+                // verticalAlign: 'top',
+                x: 0,
+                y: 0
+              },
+              relativeTo: 'chart',
+            },
+            // height: 600,
           },
           title: {
             text: 'Total number of nodes'
@@ -45,6 +57,7 @@
               text: 'Total nodes'
             },
             min: 0,
+            // softMax: 500,
           },
           exporting: {
             menuItemDefinitions: {
@@ -56,12 +69,6 @@
               }
             },
             buttons: {
-              // update: {
-              //   text: 'Update',
-              //   onclick: () => {
-              //     this.fetchPoolData();
-              //   },
-              // },
               contextButton: {
                 // symbol: null,
                 // text: 'test',
