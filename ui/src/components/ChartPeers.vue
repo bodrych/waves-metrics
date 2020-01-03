@@ -18,6 +18,7 @@
         chartOptions: {
           chart: {
             type: 'areaspline',
+            animation: false,
             zoomType: 'x',
             panning: true,
             panKey: 'shift',
@@ -35,16 +36,27 @@
             },
             // height: 600,
           },
+          // responsive: {
+          //   rules: [
+          //     {
+          //       condition: {
+          //         minWidth: 500,
+          //       },
+          //     },
+          //   ],
+          // },
           title: {
-            text: 'Total number of nodes'
+            text: 'Total number of nodes',
+            // align: 'left',
+            // widthAdjust: -200,
           },
           subtitle: {
             text: ''
           },
           credits: {
               enabled: true,
-              href: 'https://metrics.badr.dev',
-              text: 'metrics.badr.dev'
+              href: 'https://waves-metrics.badr.dev',
+              text: 'waves-metrics.badr.dev'
           },
           legend: {
             enabled: false
@@ -66,13 +78,27 @@
                 onclick: () => {
                   this.fetchPeersData();
                 },
+              },
+              resetZoom: {
+                text: 'Reset zoom',
+                onclick() {
+                  this.zoomOut();
+                }
               }
             },
             buttons: {
               contextButton: {
                 // symbol: null,
                 // text: 'test',
+                symbolSize: 16,
+                symbolX: 16,
+                symbolY: 16,
+                width: 32,
+                height: 32,
+                x: 0,
+                y: -10,
                 menuItems: [
+                  // "resetZoom",
                   "update",
                   "viewFullscreen",
                   "printChart",
@@ -80,9 +106,9 @@
                   "downloadJPEG",
                   "downloadPDF",
                   "downloadSVG",
-                ]
-              }
-            }
+                ],
+              },
+            },
           },
           plotOptions: {
             areaspline: {

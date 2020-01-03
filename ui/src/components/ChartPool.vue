@@ -18,6 +18,7 @@
         chartOptions: {
           chart: {
             type: 'areaspline',
+            animation: false,
             zoomType: 'x',
             panning: true,
             panKey: 'shift',
@@ -43,8 +44,8 @@
           },
           credits: {
               enabled: true,
-              href: 'https://metrics.badr.dev',
-              text: 'metrics.badr.dev'
+              href: 'https://waves-metrics.badr.dev',
+              text: 'waves-metrics.badr.dev'
           },
           legend: {
             enabled: false
@@ -63,15 +64,29 @@
               update: {
                 text: 'Update',
                 onclick: () => {
-                  this.fetchPoolData();
+                  this.fetchPeersData();
                 },
+              },
+              resetZoom: {
+                text: 'Reset zoom',
+                onclick() {
+                  this.zoomOut();
+                }
               }
             },
             buttons: {
               contextButton: {
                 // symbol: null,
                 // text: 'test',
+                symbolSize: 16,
+                symbolX: 16,
+                symbolY: 16,
+                width: 32,
+                height: 32,
+                x: 0,
+                y: -10,
                 menuItems: [
+                  // "resetZoom",
                   "update",
                   "viewFullscreen",
                   "printChart",
@@ -80,10 +95,8 @@
                   "downloadPDF",
                   "downloadSVG",
                 ],
-                // x: 0,
-                // y: 0,
-              }
-            }
+              },
+            },
           },
           // navigation: {
           //   buttonOptions: {

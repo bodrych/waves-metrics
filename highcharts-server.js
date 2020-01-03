@@ -28,8 +28,8 @@ app.get('*', async (req, res) => {
         },
         credits: {
           enabled: true,
-          href: 'https://metrics.badr.dev',
-          text: 'metrics.badr.dev'
+          href: 'https://waves-metrics.badr.dev',
+          text: 'waves-metrics.badr.dev'
         },
         legend: {
           enabled: false
@@ -57,6 +57,16 @@ app.get('*', async (req, res) => {
                 [1, 'rgba(66, 165, 245, 0)'],
               ]
             },
+            marker: {
+              radius: 1
+            },
+            lineWidth: 1,
+            states: {
+              hover: {
+                lineWidth: 1
+              }
+            },
+            threshold: null
           }
         },
         series: [
