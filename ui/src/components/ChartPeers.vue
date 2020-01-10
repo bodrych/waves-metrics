@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-card-text>
-      <highcharts class="chart" :options="chartOptions" :updateArgs="updateArgs"></highcharts>
+      <highcharts :constructor-type="'stockChart'" class="chart" :options="chartOptions" :updateArgs="updateArgs"></highcharts>
     </v-card-text>
   </v-card>
 </template>
@@ -53,6 +53,9 @@
           subtitle: {
             text: ''
           },
+          // scrollbar: {
+          //   enabled: false,
+          // },
           credits: {
               enabled: true,
               href: 'https://waves-metrics.badr.dev',
