@@ -26,7 +26,7 @@ const getLastHeight = async () => {
 	const result = await influx.query(
 		`select last("height") from blocks`,
 	);
-	return result[0] && result[0]['height'] || 0;
+	return result[0] && result[0]['last'] || 0;
 }
 
 const getHeight = async () => {
@@ -63,7 +63,7 @@ const main = async () => {
 				`select "height" from blocks where "height" = ${header.height}`,
 			);
 			if (result.length > 0) {
-				return;
+				continue;
 			}
 			const generatingBalance = await getGeneratingBalance({ address: header.generator, height: header.height });
 			await influx.writePoints(
@@ -85,6 +85,7 @@ const main = async () => {
 					}
 				],
 			);
+			lastHeight++;
 		}
 	} catch (e) {
 		console.log(e);
