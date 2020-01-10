@@ -1,9 +1,6 @@
 const Influx = require('influx');
 const axios = require('axios');
 
-const maxDepth = 10000;
-const step = 99;
-
 const influx = new Influx.InfluxDB({
 	host: 'localhost',
 	database: 'waves',
@@ -53,55 +50,45 @@ const getBlockHeaderSeq = async ({ from, to }) => {
 }
 
 const main = async () => {
-	let lastHeight = await getLastHeight();
-	for(;;) {
-		const height = await getHeight();
-		if (height - lastHeight > maxDepth) {
-			throw new Error('maxDepth exceeded');
-		}
-		if (height < lastHeight + 500) {
-			await new Promise(r => setTimeout(r, 1000));
-			continue;
-		}
-		const currentHeight = lastHeight + 1;
-		const nextHeight = currentHeight + step > height ? height : currentHeight + step;
-		const headers = await getBlockHeaderSeq({ from: currentHeight, to: nextHeight });
-		lastHeight = nextHeight;
-		headers.forEach(async (item) => {
+	try {
+		let lastHeight = await getLastHeight();
+		for (;;) {
+			const height = await getHeight();
+			if (height < lastHeight + 500) {
+				await new Promise(r => setTimeout(r, 60000));
+				continue;
+			}
+			const header = await getBlockHeader({ height: lastHeight + 1 });
 			const result = await influx.query(
-				`select "height" from blocks where "height" = ${item.height}`,
+				`select "height" from blocks where "height" = ${header.height}`,
 			);
 			if (result.length > 0) {
 				return;
 			}
-			const generatingBalance = await getGeneratingBalance({ address: item.generator, height: item.height });
+			const generatingBalance = await getGeneratingBalance({ address: header.generator, height: header.height });
 			await influx.writePoints(
 				[
 					{
 						measurement: 'blocks',
 						fields: {
-							height: item.height,
-							transactionCount: item.transactionCount,
-							totalFee: item.totalFee,
-							reward: item.reward,
-							blocksize: item.blocksize,
+							height: header.height,
+							transactionCount: header.transactionCount,
+							totalFee: header.totalFee,
+							reward: header.reward,
+							blocksize: header.blocksize,
 							generatingBalance,
 						},
 						tags: {
-							generator: item.generator,
+							generator: header.generator,
 						},
-						timestamp: new Date(item.timestamp)
+						timestamp: new Date(header.timestamp)
 					}
 				],
 			);
-		});
+		}
+	} catch (e) {
+		console.log(e);
 	}
 }
 
-(async () => {
-	try {
-		await main();
-	} catch(e) {
-		console.log(e);
-	}
-})()
+main();
