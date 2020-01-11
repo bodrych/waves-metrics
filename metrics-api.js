@@ -90,10 +90,10 @@ app.get('/balance', async (req, res) => {
 		const last = await influx.query(
 			`select last(height) from blocks`
 		);
-		console.log(first)
-		console.log(last)
+		const from = first[0]['time'].getNanoTime();
+		const to = last[0]['time'].getNanoTime();
 		const result = await influx.query(
-			`select round(sum(mean)) from (select mean(generatingBalance) from blocks where time >= ${first[0]['time'].getNanoTime()} and time <= ${last[0]['time'].getNanoTime()} group by time(1d), generator fill(none)) where time >= ${first[0]['time'].getNanoTime()} and time <= ${last[0]['time'].getNanoTime()} group by time(1d) fill(0)`,
+			`select round(sum(mean)) from (select mean(generatingBalance) from blocks where time >= ${from} and time <= ${to} group by time(1d), generator fill(none)) where time >= ${from} and time <= ${to} group by time(1d) fill(0)`,
 			{
 				precision: 'ms',
 			}
