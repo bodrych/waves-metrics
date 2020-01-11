@@ -84,11 +84,16 @@ app.get('/peers', async (req, res) => {
 
 app.get('/balance', async (req, res) => {
 	try {
-		const limits = await influx.query(
-			`select first(height) from blocks; select last(height) from blocks`
+		const first = await influx.query(
+			`select first(height) from blocks`
 		);
+		const last = await influx.query(
+			`select last(height) from blocks`
+		);
+		console.log(first)
+		console.log(last)
 		const result = await influx.query(
-			`select round(sum(mean)) from (select mean(generatingBalance) from blocks where time >= ${limits[0][0][0]['time']} and time <= ${limits[0][1][0]['time']} group by time(1d), generator fill(none)) where time >= ${limits[0][0][0]['time']} and time <= ${limits[0][1][0]['time']} group by time(1d) fill(0)`,
+			`select round(sum(mean)) from (select mean(generatingBalance) from blocks where time >= ${first[0]['time']} and time <= ${last[0]['time']} group by time(1d), generator fill(none)) where time >= ${first[0]['time']} and time <= ${last[0]['time']} group by time(1d) fill(0)`,
 			{
 				precision: 'ms',
 			}
