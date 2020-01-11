@@ -62,7 +62,7 @@ const main = async () => {
 			}
 			const to = from + step > height - gap ? height - gap : from + step;
 			const headers = await getBlockHeaderSeq({ from, to });
-			const promises = headers.map(header => {
+			const promises = headers.map(async header => {
 				const result = await influx.query(
 					`select "height" from blocks where "height" = ${header.height}`,
 				);

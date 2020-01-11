@@ -20,7 +20,21 @@ const influx = new Influx.InfluxDB({
 				amount: Influx.FieldType.INTEGER,
 			},
 			tags: [],
-		}
+		},
+		{
+			measurement: 'blocks',
+			fields: {
+				height: Influx.FieldType.INTEGER,
+				transactionCount: Influx.FieldType.INTEGER,
+				totalFee: Influx.FieldType.INTEGER,
+				reward: Influx.FieldType.INTEGER,
+				blocksize: Influx.FieldType.INTEGER,
+				generatingBalance: Influx.FieldType.INTEGER,
+			},
+			tags: [
+				'generator',
+			],
+		},
 	]
 });
 
@@ -68,4 +82,19 @@ app.get('/peers', async (req, res) => {
 	}
 })
 
-// select round(sum(mean)) from (select mean(generatingBalance) from blocks group by time(1d), generator fill(none)) group by time(1d) fill(none)
+app.get('/balance', async (req, res) => {
+	try {
+		const result = await influx.query(
+			`select round(sum(mean)) from (select mean(generatingBalance) from blocks group by time(1d), generator fill(none)) group by time(1d) fill(none)`,
+			{
+				precision: 'ms',
+			}
+		);
+		const data = _.map(result, (value) => {
+			return [ Date.parse(value['time']), value['round'] ]
+		})
+		res.json(data);
+	} catch (e) {
+		res.status(500).send(err.stack)
+	}
+})

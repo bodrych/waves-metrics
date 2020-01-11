@@ -19,6 +19,10 @@ noDataToDisplayInit(Highcharts)
 // exportDataInit(Highcharts)
 // darkUnicaInit(Highcharts)
 
+Highcharts.setOptions({
+  // options here
+})
+
 Vue.config.productionTip = false
 
 Vue.use(HighchartsVue)
