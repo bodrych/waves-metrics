@@ -93,7 +93,7 @@ app.get('/balance', async (req, res) => {
 		console.log(first)
 		console.log(last)
 		const result = await influx.query(
-			`select round(sum(mean)) from (select mean(generatingBalance) from blocks where time >= ${first[0]['time']} and time <= ${last[0]['time']} group by time(1d), generator fill(none)) where time >= ${first[0]['time']} and time <= ${last[0]['time']} group by time(1d) fill(0)`,
+			`select round(sum(mean)) from (select mean(generatingBalance) from blocks where time >= ${first[0]['time'].getNanoTime()} and time <= ${last[0]['time'].getNanoTime()} group by time(1d), generator fill(none)) where time >= ${first[0]['time'].getNanoTime()} and time <= ${last[0]['time'].getNanoTime()} group by time(1d) fill(0)`,
 			{
 				precision: 'ms',
 			}
