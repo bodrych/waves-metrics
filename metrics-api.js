@@ -67,3 +67,5 @@ app.get('/peers', async (req, res) => {
 		res.status(500).send(err.stack)
 	}
 })
+
+// select round(sum(mean)) from (select mean(generatingBalance) from blocks group by time(1d), generator fill(none)) group by time(1d) fill(none)

@@ -34,11 +34,6 @@ const getHeight = async () => {
 	return response.data.height;
 }
 
-const getGeneratingBalance = async ({ address, height }) => {
-	const response = await axios.get(`http://localhost:6869/addresses/generatingBalance/${address}/${height}`);
-	return response.data.balance;
-}
-
 const getBlockHeader = async ({ height }) => {
 	const response = await axios.get(`http://localhost:6869/blocks/headers/at/${height}`);
 	return response.data;
@@ -51,41 +46,51 @@ const getBlockHeaderSeq = async ({ from, to }) => {
 
 const main = async () => {
 	try {
+		const step = 99;
+		const gap = 500;
 		let lastHeight = await getLastHeight();
 		for (;;) {
 			const height = await getHeight();
-			if (height < lastHeight + 500) {
+			if (height < lastHeight + gap) {
 				await new Promise(r => setTimeout(r, 60000));
 				continue;
 			}
-			const header = await getBlockHeader({ height: lastHeight + 1 });
-			const result = await influx.query(
-				`select "height" from blocks where "height" = ${header.height}`,
-			);
-			if (result.length > 0) {
+			const from = lastHeight + 1;
+			if (from > height - gap) {
+				await new Promise(r => setTimeout(r, 60000));
 				continue;
 			}
-			const generatingBalance = await getGeneratingBalance({ address: header.generator, height: header.height });
-			await influx.writePoints(
-				[
-					{
-						measurement: 'blocks',
-						fields: {
-							height: header.height,
-							transactionCount: header.transactionCount,
-							totalFee: header.totalFee,
-							reward: header.reward,
-							blocksize: header.blocksize,
-							generatingBalance,
-						},
-						tags: {
-							generator: header.generator,
-						},
-						timestamp: new Date(header.timestamp)
-					}
-				],
-			);
-			lastHeight++;
+			const to = from + step > height - gap ? height - gap : from + step;
+			const headers = await getBlockHeaderSeq({ from, to });
+			const promises = headers.map(header => {
+				const result = await influx.query(
+					`select "height" from blocks where "height" = ${header.height}`,
+				);
+				if (result.length > 0) {
+					throw new Error('height already exists');
+				}
+				await influx.writePoints(
+					[
+						{
+							measurement: 'blocks',
+							fields: {
+								height: header.height,
+								transactionCount: header.transactionCount,
+								totalFee: header.totalFee,
+								reward: header.reward,
+								blocksize: header.blocksize,
+								generatingBalance: header.generatingBalance,
+							},
+							tags: {
+								generator: header.generator,
+							},
+							timestamp: new Date(header.timestamp)
+						}
+					],
+				);
+			})
+			await Promise.all(promises);
+			lastHeight = to;
 		}
 	} catch (e) {
 		console.log(e);
