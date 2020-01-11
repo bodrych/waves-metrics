@@ -16,6 +16,9 @@
 			<v-col cols="12" md="6">
 				<ChartPool/>
 			</v-col>
+			<v-col cols="12" md="6">
+				<ChartBalance/>
+			</v-col>
 		</v-row>
 	</v-container>
 </template>
@@ -23,12 +26,14 @@
 <script>
 	import ChartPool from '@/components/ChartPool.vue'
 	import ChartPeers from '@/components/ChartPeers.vue'
+	import ChartBalance from '@/components/ChartBalance.vue'
 
 	export default {
 		name: 'home',
 		components: {
 			ChartPool,
 			ChartPeers,
+			ChartBalance,
 		},
 		computed: {
 			tooltip() {

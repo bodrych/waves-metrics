@@ -84,14 +84,17 @@ app.get('/peers', async (req, res) => {
 
 app.get('/balance', async (req, res) => {
 	try {
+		const limits = await influx.query(
+			`select first(height) from blocks; select last(height) from blocks`
+		);
 		const result = await influx.query(
-			`select round(sum(mean)) from (select mean(generatingBalance) from blocks group by time(1d), generator fill(none)) group by time(1d) fill(none)`,
+			`select round(sum(mean)) from (select mean(generatingBalance) from blocks where time >= ${limits[0].time} and time <= ${limits[1].time} group by time(1d), generator fill(0)) where time >= ${limits[0].time} and time <= ${limits[1].time} group by time(1d) fill(0)`,
 			{
 				precision: 'ms',
 			}
 		);
 		const data = _.map(result, (value) => {
-			return [ Date.parse(value['time']), value['round'] ]
+			return [ Date.parse(value['time']), value['round'] / 1e8 ]
 		})
 		res.json(data);
 	} catch (e) {

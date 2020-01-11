@@ -29,14 +29,17 @@ export default {
           panKey: "shift",
           style: {
             fontFamily: "'Roboto', sans-serif"
-          }
+          },
           // height: 600,
         },
         title: {
-          text: "Unconfirmed Transactions Pool Size"
+          text: "Average generating balance"
         },
         subtitle: {
           text: ""
+        },
+        scrollbar: {
+          enabled: true,
         },
         credits: {
           enabled: true,
@@ -55,17 +58,48 @@ export default {
         rangeSelector: {
           buttons: [
             {
-              type: "hour",
+              type: "week",
               count: 1,
-              text: "1h",
+              text: "1w",
               dataGrouping: {
                 enabled: false,
               },
             },
             {
-              type: "day",
+              type: "month",
               count: 1,
-              text: "1d",
+              text: "1m",
+              dataGrouping: {
+                enabled: false,
+              },
+            },
+            {
+              type: "month",
+              count: 3,
+              text: "3m",
+              dataGrouping: {
+                enabled: false,
+              },
+            },
+            {
+              type: "month",
+              count: 6,
+              text: "6m",
+              dataGrouping: {
+                enabled: false,
+              },
+            },
+            {
+              type: "ytd",
+              text: "ytd",
+              dataGrouping: {
+                enabled: false,
+              },
+            },
+            {
+              type: "year",
+              count: 1,
+              text: "1y",
               dataGrouping: {
                 enabled: false,
               },
@@ -78,20 +112,16 @@ export default {
               },
             }
           ],
-          inputEnabled: false,
-          // selected: 1,
-        },
-        scrollbar: {
-          enabled: true,
+          inputEnabled: false
         },
         exporting: {
           menuItemDefinitions: {
             update: {
               text: "Update",
               onclick: () => {
-                this.fetchPoolData();
+                this.fetchGeneratingBalanceData();
               }
-            }
+            },
           },
           buttons: {
             contextButton: {
@@ -140,38 +170,42 @@ export default {
               }
             },
             threshold: null,
-            tooltip: {
-                // valueDecimals: 0
-            },
-          }
+            // tooltip: {
+            //   pointFormat: '<span style="color:{point.color}">●</span> {series.name}: <b>{point.y}</b> ({point.change}%)<br/>',
+            //   changeDecimals: 8,
+            //   valueDecimals: 8
+            // },
+          },
         },
         series: [
           {
-            name: "Pool size",
+            name: "Generating balance",
             data: [],
-            color: "rgba(66, 165, 245, 1)"
+            color: "rgba(66, 165, 245, 1)",
+            // compare: 'value',
+            // compareStart: true,
           }
         ]
       }
     };
   },
   mounted() {
-    this.fetchPoolData();
+    this.fetchGeneratingBalanceData();
   },
   computed: {
-    ...mapGetters(["getPoolData"])
+    ...mapGetters(["getGeneratingBalanceData"])
   },
   watch: {
     title(newValue) {
       this.chartOptions.title.text = newValue;
     },
-    getPoolData(newValue) {
+    getGeneratingBalanceData(newValue) {
       this.chartOptions.series[0].data = newValue;
       // this.chartOptions.subtitle.text = `${(new Date(newValue[0][0])).toUTCString()} - ${(new Date(newValue[newValue.length-1][0])).toUTCString()}`;
     }
   },
   methods: {
-    ...mapActions(["fetchPoolData"])
+    ...mapActions(["fetchGeneratingBalanceData"])
   }
 };
 </script>

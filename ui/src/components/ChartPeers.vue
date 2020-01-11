@@ -29,7 +29,7 @@ export default {
           panKey: "shift",
           style: {
             fontFamily: "'Roboto', sans-serif"
-          },
+          }
           // height: 600,
         },
         title: {
@@ -39,7 +39,7 @@ export default {
           text: ""
         },
         scrollbar: {
-          enabled: true,
+          enabled: true
         },
         credits: {
           enabled: true,
@@ -62,54 +62,54 @@ export default {
               count: 1,
               text: "1w",
               dataGrouping: {
-                enabled: false,
-              },
+                enabled: false
+              }
             },
             {
               type: "month",
               count: 1,
               text: "1m",
               dataGrouping: {
-                enabled: false,
-              },
+                enabled: false
+              }
             },
             {
               type: "month",
               count: 3,
               text: "3m",
               dataGrouping: {
-                enabled: false,
-              },
+                enabled: false
+              }
             },
             {
               type: "month",
               count: 6,
               text: "6m",
               dataGrouping: {
-                enabled: false,
-              },
+                enabled: false
+              }
             },
             {
               type: "ytd",
               text: "ytd",
               dataGrouping: {
-                enabled: false,
-              },
+                enabled: false
+              }
             },
             {
               type: "year",
               count: 1,
               text: "1y",
               dataGrouping: {
-                enabled: false,
-              },
+                enabled: false
+              }
             },
             {
               type: "all",
               text: "all",
               dataGrouping: {
-                enabled: false,
-              },
+                enabled: false
+              }
             }
           ],
           inputEnabled: false
@@ -121,7 +121,7 @@ export default {
               onclick: () => {
                 this.fetchPeersData();
               }
-            },
+            }
           },
           buttons: {
             contextButton: {
@@ -171,15 +171,18 @@ export default {
             },
             threshold: null,
             tooltip: {
-                // valueDecimals: 0
+              // pointFormat: '<span style="color:{point.color}">●</span> {series.name}: <b>{point.y}</b> ({point.change}%)<br/>',
+              // changeDecimals: 2,
+              // valueDecimals: 0
             },
-          },
+          }
         },
         series: [
           {
             name: "Total nodes",
             data: [],
             color: "rgba(66, 165, 245, 1)",
+            // compare: 'percent',
           }
         ]
       }
