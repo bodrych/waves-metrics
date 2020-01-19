@@ -1,5 +1,6 @@
 const Influx = require('influx');
 const axios = require('axios');
+const logUpdate = require('log-update');
 
 const influx = new Influx.InfluxDB({
 	host: 'localhost',
@@ -90,7 +91,7 @@ const main = async () => {
 				);
 			})
 			await Promise.all(promises);
-			console.log(from + ' - ' + to);
+			logUpdate(from + ' - ' + to);
 			lastHeight = to;
 		}
 	} catch (e) {

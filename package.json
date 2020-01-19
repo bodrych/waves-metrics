@@ -13,6 +13,7 @@
     "express": "^4.17.1",
     "highcharts-export-server": "^2.0.24",
     "influx": "^5.5.1",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "log-update": "^3.3.0"
   }
 }
