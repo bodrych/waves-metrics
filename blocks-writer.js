@@ -1,6 +1,6 @@
 const Influx = require('influx');
 const axios = require('axios');
-const logUpdate = require('log-update');
+const ora = require('ora');
 
 const influx = new Influx.InfluxDB({
 	host: 'localhost',
@@ -47,6 +47,7 @@ const getBlockHeaderSeq = async ({ from, to }) => {
 
 const main = async () => {
 	try {
+		const spinner = ora('Loading blocks').start();
 		const step = 99;
 		const gap = 200;
 		let lastHeight = await getLastHeight();
@@ -91,7 +92,7 @@ const main = async () => {
 				);
 			})
 			await Promise.all(promises);
-			logUpdate(from + ' - ' + to);
+			spinner.text = from + ' - ' + to;
 			lastHeight = to;
 		}
 	} catch (e) {
