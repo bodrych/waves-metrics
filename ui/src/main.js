@@ -6,7 +6,7 @@ import vuetify from './plugins/vuetify'
 import HighchartsVue from 'highcharts-vue'
 import Highcharts from 'highcharts'
 import exportingInit from 'highcharts/modules/exporting'
-import noDataToDisplayInit from 'highcharts/modules/no-data-to-display'
+// import noDataToDisplayInit from 'highcharts/modules/no-data-to-display'
 import stockInit from 'highcharts/modules/stock'
 // import dataInit from 'highcharts/modules/data'
 // import exportDataInit from 'highcharts/modules/export-data'
@@ -14,7 +14,7 @@ import stockInit from 'highcharts/modules/stock'
 
 stockInit(Highcharts)
 exportingInit(Highcharts)
-noDataToDisplayInit(Highcharts)
+// noDataToDisplayInit(Highcharts)
 // dataInit(Highcharts)
 // exportDataInit(Highcharts)
 // darkUnicaInit(Highcharts)

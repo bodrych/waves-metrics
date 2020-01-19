@@ -6,7 +6,13 @@
       clipped-left
     >
       <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"/> -->
-      <v-toolbar-title><span class="font-weight-light">Waves</span><span>Metrics</span></v-toolbar-title>
+      <v-toolbar-title
+        @click="$router.push({ name: 'home' })"
+        style="cursor: pointer"
+      >
+        <span class="font-weight-light">Waves</span>
+        <span>Metrics</span>
+      </v-toolbar-title>
       <!-- <span class="headline font-weight-light">Waves</span><span class="headline">Metrics</span> -->
       <!-- <v-spacer></v-spacer> -->
       <!-- <v-btn href="https://github.com/bodrych/" target="_blank" icon><v-icon dark>mdi-handshake</v-icon></v-btn> -->

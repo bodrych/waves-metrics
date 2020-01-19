@@ -1,14 +1,11 @@
 <template>
-  <v-card>
-    <v-card-text>
-      <highcharts
-        :constructor-type="'stockChart'"
-        class="chart"
-        :options="chartOptions"
-        :updateArgs="updateArgs"
-      ></highcharts>
-    </v-card-text>
-  </v-card>
+  <highcharts
+    :constructor-type="'stockChart'"
+    class="chart"
+    :options="chartOptions"
+    :updateArgs="updateArgs"
+    ref="hc"
+  ></highcharts>
 </template>
 
 <script>
@@ -22,21 +19,28 @@ export default {
       updateArgs: [true, true, { duration: 1000 }],
       chartOptions: {
         chart: {
-          type: "areaspline",
           animation: false,
           zoomType: "x",
           panning: true,
           panKey: "shift",
           style: {
             fontFamily: "'Roboto', sans-serif"
+          },
+          // height: 500,
+          events: {
+            load() {
+              this.showLoading();
+            }
           }
-          // height: 600,
         },
         title: {
           text: "Unconfirmed Transactions Pool Size"
         },
         subtitle: {
           text: ""
+        },
+        scrollbar: {
+          enabled: false
         },
         credits: {
           enabled: true,
@@ -50,7 +54,7 @@ export default {
           type: "datetime"
         },
         yAxis: {
-          min: 0
+          min: 0,
         },
         rangeSelector: {
           buttons: [
@@ -58,31 +62,19 @@ export default {
               type: "hour",
               count: 1,
               text: "1h",
-              dataGrouping: {
-                enabled: false,
-              },
             },
             {
               type: "day",
               count: 1,
               text: "1d",
-              dataGrouping: {
-                enabled: false,
-              },
             },
             {
               type: "all",
               text: "all",
-              dataGrouping: {
-                enabled: false,
-              },
             }
           ],
           inputEnabled: false,
           // selected: 1,
-        },
-        scrollbar: {
-          enabled: true,
         },
         exporting: {
           menuItemDefinitions: {
@@ -141,37 +133,55 @@ export default {
             },
             threshold: null,
             tooltip: {
-                // valueDecimals: 0
+              pointFormat: '{series.name}: <b>{point.y}</b><br/>',
+              // changeDecimals: 8,
+              valueDecimals: 0
             },
-          }
+          },
+          series: {
+            animation: false,
+            dataGrouping: {
+              enabled: false,
+            },
+          },
         },
         series: [
           {
             name: "Pool size",
             data: [],
-            color: "rgba(66, 165, 245, 1)"
+            color: "rgba(66, 165, 245, 1)",
+            type: "areaspline",
           }
         ]
       }
     };
   },
   mounted() {
-    this.fetchPoolData();
+    if (this.getPoolData.length === 0) this.fetchPoolData();
+    this.$refs.hc.chart.hideLoading();
   },
   computed: {
-    ...mapGetters(["getPoolData"])
+    ...mapGetters(['getPoolData'])
   },
   watch: {
     title(newValue) {
       this.chartOptions.title.text = newValue;
     },
-    getPoolData(newValue) {
-      this.chartOptions.series[0].data = newValue;
-      // this.chartOptions.subtitle.text = `${(new Date(newValue[0][0])).toUTCString()} - ${(new Date(newValue[newValue.length-1][0])).toUTCString()}`;
+    getPoolData: {
+      handler(newValue) {
+        this.chartOptions.series[0].data = newValue;
+      },
+      immediate: true,
     }
   },
   methods: {
-    ...mapActions(["fetchPoolData"])
+    ...mapActions(['fetchPoolData'])
   }
 };
 </script>
+
+<style scoped>
+  .chart {
+    height: 500px;
+  }
+</style>

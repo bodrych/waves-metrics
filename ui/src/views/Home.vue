@@ -1,39 +1,62 @@
 <template>
-	<v-container fluid>
+	<v-container>
+		<!-- <v-row>
+			<v-col>
+				<span class="overline">Blockchain Data</span>
+			</v-col>
+		</v-row> -->
 		<v-row>
-			<v-col class="text-center">
-				<!-- <v-card> -->
-					<!-- <v-card-text> -->
-						<span class="overline">{{ tooltip }}</span>
-					<!-- </v-card-text> -->
-				<!-- </v-card> -->
+			<v-col cols="12" sm="6" md="4">
+				<v-card
+					:to="{ name: 'balance' }"
+				>
+					<v-card-title>
+						<span class="subtitle-1">Generating balance</span>
+					</v-card-title>
+					<v-card-text>
+						<PreviewChartBalance/>
+					</v-card-text>
+				</v-card>
 			</v-col>
-		</v-row>
-		<v-row>
-			<v-col cols="12" md="6">
-				<ChartPeers/>
+			<v-col cols="12" sm="6" md="4">
+				<v-card
+					:to="{ name: 'peers' }"
+				>
+					<v-card-title>
+						<span class="subtitle-1">Total number of nodes</span>
+					</v-card-title>
+					<v-card-text>
+						<PreviewChartPeers/>
+					</v-card-text>
+				</v-card>
 			</v-col>
-			<v-col cols="12" md="6">
-				<ChartPool/>
-			</v-col>
-			<v-col cols="12" md="6">
-				<ChartBalance/>
+			<v-col cols="12" sm="6" md="4">
+				<v-card
+					:to="{ name: 'pool' }"
+				>
+					<v-card-title>
+						<span class="subtitle-1">UTx-pool size</span>
+					</v-card-title>
+					<v-card-text>
+						<PreviewChartPool/>
+					</v-card-text>
+				</v-card>
 			</v-col>
 		</v-row>
 	</v-container>
 </template>
 
 <script>
-	import ChartPool from '@/components/ChartPool.vue'
-	import ChartPeers from '@/components/ChartPeers.vue'
-	import ChartBalance from '@/components/ChartBalance.vue'
+	import PreviewChartPool from '@/components/PreviewChartPool.vue'
+	import PreviewChartPeers from '@/components/PreviewChartPeers.vue'
+	import PreviewChartBalance from '@/components/PreviewChartBalance.vue'
 
 	export default {
 		name: 'home',
 		components: {
-			ChartPool,
-			ChartPeers,
-			ChartBalance,
+			PreviewChartPool,
+			PreviewChartPeers,
+			PreviewChartBalance,
 		},
 		computed: {
 			tooltip() {

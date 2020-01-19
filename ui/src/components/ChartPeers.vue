@@ -1,14 +1,11 @@
 <template>
-  <v-card>
-    <v-card-text>
-      <highcharts
-        :constructor-type="'stockChart'"
-        class="chart"
-        :options="chartOptions"
-        :updateArgs="updateArgs"
-      ></highcharts>
-    </v-card-text>
-  </v-card>
+  <highcharts
+    :constructor-type="'stockChart'"
+    class="chart"
+    :options="chartOptions"
+    :updateArgs="updateArgs"
+    ref="hc"
+  ></highcharts>
 </template>
 
 <script>
@@ -22,15 +19,19 @@ export default {
       updateArgs: [true, true, { duration: 1000 }],
       chartOptions: {
         chart: {
-          type: "areaspline",
           animation: false,
           zoomType: "x",
           panning: true,
           panKey: "shift",
           style: {
             fontFamily: "'Roboto', sans-serif"
+          },
+          // height: 500,
+          events: {
+            load() {
+              this.showLoading();
+            }
           }
-          // height: 600,
         },
         title: {
           text: "Total number of nodes"
@@ -39,7 +40,7 @@ export default {
           text: ""
         },
         scrollbar: {
-          enabled: true
+          enabled: false
         },
         credits: {
           enabled: true,
@@ -60,56 +61,35 @@ export default {
             {
               type: "week",
               count: 1,
-              text: "1w",
-              dataGrouping: {
-                enabled: false
-              }
+              text: "1w"
             },
             {
               type: "month",
               count: 1,
-              text: "1m",
-              dataGrouping: {
-                enabled: false
-              }
+              text: "1m"
             },
             {
               type: "month",
               count: 3,
-              text: "3m",
-              dataGrouping: {
-                enabled: false
-              }
+              text: "3m"
             },
             {
               type: "month",
               count: 6,
-              text: "6m",
-              dataGrouping: {
-                enabled: false
-              }
+              text: "6m"
             },
             {
               type: "ytd",
-              text: "ytd",
-              dataGrouping: {
-                enabled: false
-              }
+              text: "ytd"
             },
             {
               type: "year",
               count: 1,
-              text: "1y",
-              dataGrouping: {
-                enabled: false
-              }
+              text: "1y"
             },
             {
               type: "all",
-              text: "all",
-              dataGrouping: {
-                enabled: false
-              }
+              text: "all"
             }
           ],
           inputEnabled: false
@@ -171,10 +151,16 @@ export default {
             },
             threshold: null,
             tooltip: {
-              // pointFormat: '<span style="color:{point.color}">●</span> {series.name}: <b>{point.y}</b> ({point.change}%)<br/>',
-              // changeDecimals: 2,
-              // valueDecimals: 0
-            },
+              pointFormat: '{series.name}: <b>{point.y}</b><br/>',
+              // changeDecimals: 8,
+              valueDecimals: 0
+            }
+          },
+          series: {
+            animation: false,
+            dataGrouping: {
+              enabled: false
+            }
           }
         },
         series: [
@@ -182,6 +168,7 @@ export default {
             name: "Total nodes",
             data: [],
             color: "rgba(66, 165, 245, 1)",
+            type: "areaspline",
             // compare: 'percent',
           }
         ]
@@ -189,18 +176,18 @@ export default {
     };
   },
   mounted() {
-    this.fetchPeersData();
+    if (this.getPeersData.length === 0) this.fetchPeersData();
+    this.$refs.hc.chart.hideLoading();
   },
   computed: {
     ...mapGetters(["getPeersData"])
   },
   watch: {
-    title(newValue) {
-      this.chartOptions.title.text = newValue;
-    },
-    getPeersData(newValue) {
-      this.chartOptions.series[0].data = newValue;
-      // this.chartOptions.subtitle.text = `${(new Date(newValue[0][0])).toUTCString()} - ${(new Date(newValue[newValue.length-1][0])).toUTCString()}`;
+    getPeersData: {
+      handler(newValue) {
+        this.chartOptions.series[0].data = newValue;
+      },
+      immediate: true
     }
   },
   methods: {
@@ -208,3 +195,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+  .chart {
+    height: 500px;
+  }
+</style>

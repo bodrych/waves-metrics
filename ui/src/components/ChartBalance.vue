@@ -1,14 +1,11 @@
 <template>
-  <v-card>
-    <v-card-text>
-      <highcharts
-        :constructor-type="'stockChart'"
-        class="chart"
-        :options="chartOptions"
-        :updateArgs="updateArgs"
-      ></highcharts>
-    </v-card-text>
-  </v-card>
+  <highcharts
+    :constructor-type="'stockChart'"
+    class="chart"
+    :options="chartOptions"
+    :updateArgs="updateArgs"
+    ref="hc"
+  ></highcharts>
 </template>
 
 <script>
@@ -22,7 +19,6 @@ export default {
       updateArgs: [true, true, { duration: 1000 }],
       chartOptions: {
         chart: {
-          type: "areaspline",
           animation: false,
           zoomType: "x",
           panning: true,
@@ -30,16 +26,21 @@ export default {
           style: {
             fontFamily: "'Roboto', sans-serif"
           },
-          // height: 600,
+          // height: 500,
+          events: {
+            load() {
+              this.showLoading();
+            }
+          }
         },
         title: {
-          text: "Average generating balance"
+          text: "Average Generating Balance"
         },
         subtitle: {
           text: ""
         },
         scrollbar: {
-          enabled: true,
+          enabled: false,
         },
         credits: {
           enabled: true,
@@ -61,40 +62,25 @@ export default {
               type: "week",
               count: 1,
               text: "1w",
-              dataGrouping: {
-                enabled: false,
-              },
             },
             {
               type: "month",
               count: 1,
               text: "1m",
-              dataGrouping: {
-                enabled: false,
-              },
             },
             {
               type: "month",
               count: 3,
               text: "3m",
-              dataGrouping: {
-                enabled: false,
-              },
             },
             {
               type: "month",
               count: 6,
               text: "6m",
-              dataGrouping: {
-                enabled: false,
-              },
             },
             {
               type: "ytd",
               text: "ytd",
-              dataGrouping: {
-                enabled: false,
-              },
             },
             {
               type: "year",
@@ -107,9 +93,6 @@ export default {
             {
               type: "all",
               text: "all",
-              dataGrouping: {
-                enabled: false,
-              },
             }
           ],
           inputEnabled: false
@@ -170,11 +153,17 @@ export default {
               }
             },
             threshold: null,
-            // tooltip: {
-            //   pointFormat: '<span style="color:{point.color}">●</span> {series.name}: <b>{point.y}</b> ({point.change}%)<br/>',
-            //   changeDecimals: 8,
-            //   valueDecimals: 8
-            // },
+            tooltip: {
+              pointFormat: '{series.name}: <b>{point.y}</b><br/>',
+              // changeDecimals: 8,
+              valueDecimals: 8
+            },
+          },
+          series: {
+            animation: false,
+            dataGrouping: {
+              enabled: false,
+            },
           },
         },
         series: [
@@ -182,7 +171,8 @@ export default {
             name: "Generating balance",
             data: [],
             color: "rgba(66, 165, 245, 1)",
-            // compare: 'value',
+            type: "areaspline",
+            // compare: 'percent',
             // compareStart: true,
           }
         ]
@@ -190,22 +180,28 @@ export default {
     };
   },
   mounted() {
-    this.fetchGeneratingBalanceData();
+    if (this.getGeneratingBalanceData.length === 0) this.fetchGeneratingBalanceData();
+    this.$refs.hc.chart.hideLoading();
   },
   computed: {
-    ...mapGetters(["getGeneratingBalanceData"])
+    ...mapGetters(['getGeneratingBalanceData'])
   },
   watch: {
-    title(newValue) {
-      this.chartOptions.title.text = newValue;
-    },
-    getGeneratingBalanceData(newValue) {
-      this.chartOptions.series[0].data = newValue;
-      // this.chartOptions.subtitle.text = `${(new Date(newValue[0][0])).toUTCString()} - ${(new Date(newValue[newValue.length-1][0])).toUTCString()}`;
+    getGeneratingBalanceData: {
+      handler(newValue) {
+        this.chartOptions.series[0].data = newValue;
+      },
+      immediate: true,
     }
   },
   methods: {
-    ...mapActions(["fetchGeneratingBalanceData"])
+    ...mapActions(['fetchGeneratingBalanceData'])
   }
 };
 </script>
+
+<style scoped>
+  .chart {
+    height: 500px;
+  }
+</style>

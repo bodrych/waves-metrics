@@ -47,7 +47,7 @@ const getBlockHeaderSeq = async ({ from, to }) => {
 const main = async () => {
 	try {
 		const step = 99;
-		const gap = 500;
+		const gap = 200;
 		let lastHeight = await getLastHeight();
 		for (;;) {
 			const height = await getHeight();
@@ -90,6 +90,7 @@ const main = async () => {
 				);
 			})
 			await Promise.all(promises);
+			console.log(from + ' - ' + to);
 			lastHeight = to;
 		}
 	} catch (e) {
