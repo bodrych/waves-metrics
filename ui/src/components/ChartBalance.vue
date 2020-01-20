@@ -86,9 +86,6 @@ export default {
               type: "year",
               count: 1,
               text: "1y",
-              dataGrouping: {
-                enabled: false,
-              },
             },
             {
               type: "all",
@@ -179,8 +176,8 @@ export default {
       }
     };
   },
-  mounted() {
-    if (this.getGeneratingBalanceData.length === 0) this.fetchGeneratingBalanceData();
+  async mounted() {
+    if (this.getGeneratingBalanceData.length === 0) await this.fetchGeneratingBalanceData();
     this.$refs.hc.chart.hideLoading();
   },
   computed: {

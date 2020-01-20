@@ -105,8 +105,8 @@ export default {
       }
     };
   },
-  mounted() {
-    if (this.getGeneratingBalanceData.length === 0) this.fetchGeneratingBalanceData();
+  async mounted() {
+    if (this.getGeneratingBalanceData.length === 0) await this.fetchGeneratingBalanceData();
     this.$refs.hc.chart.hideLoading();
   },
   computed: {

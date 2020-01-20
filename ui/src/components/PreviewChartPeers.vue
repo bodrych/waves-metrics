@@ -104,8 +104,8 @@ export default {
       }
     };
   },
-  mounted() {
-    if (this.getPeersData.length === 0) this.fetchPeersData();
+  async mounted() {
+    if (this.getPeersData.length === 0) await this.fetchPeersData();
     this.$refs.hc.chart.hideLoading();
   },
   computed: {

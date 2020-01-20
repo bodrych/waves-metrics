@@ -105,8 +105,8 @@ export default {
       }
     };
   },
-  mounted() {
-    if (this.getPoolData.length === 0) this.fetchPoolData();
+  async mounted() {
+    if (this.getPoolData.length === 0) await this.fetchPoolData();
     this.$refs.hc.chart.hideLoading();
   },
   computed: {

@@ -61,35 +61,35 @@ export default {
             {
               type: "week",
               count: 1,
-              text: "1w"
+              text: "1w",
             },
             {
               type: "month",
               count: 1,
-              text: "1m"
+              text: "1m",
             },
             {
               type: "month",
               count: 3,
-              text: "3m"
+              text: "3m",
             },
             {
               type: "month",
               count: 6,
-              text: "6m"
+              text: "6m",
             },
             {
               type: "ytd",
-              text: "ytd"
+              text: "ytd",
             },
             {
               type: "year",
               count: 1,
-              text: "1y"
+              text: "1y",
             },
             {
               type: "all",
-              text: "all"
+              text: "all",
             }
           ],
           inputEnabled: false
@@ -175,8 +175,8 @@ export default {
       }
     };
   },
-  mounted() {
-    if (this.getPeersData.length === 0) this.fetchPeersData();
+  async mounted() {
+    if (this.getPeersData.length === 0) await this.fetchPeersData();
     this.$refs.hc.chart.hideLoading();
   },
   computed: {
