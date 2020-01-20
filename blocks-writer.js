@@ -48,15 +48,11 @@ const getBlockHeaderSeq = async ({ from, to }) => {
 const main = async () => {
 	try {
 		// const spinner = ora('Loading blocks').start();
-		const step = 9;
+		const step = 99;
 		const gap = 100;
 		let lastHeight = await getLastHeight();
-		for (; ;) {
+		for (;;) {
 			const height = await getHeight();
-			if (height < lastHeight + gap) {
-				await new Promise(r => setTimeout(r, 60000));
-				continue;
-			}
 			const from = lastHeight + 1;
 			if (from > height - gap) {
 				await new Promise(r => setTimeout(r, 60000));
