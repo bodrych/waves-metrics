@@ -32,7 +32,7 @@ export default new Vuex.Store({
 	getters: {
 		getPoolData: (state) => state.poolData,
 		getPeersData: (state) => state.peersData,
-		getGeneratingBalanceData: (state) => state.generatingBalanceData,
+		getGeneratingBalanceData: (state) => state.generatingBalanceData.slice(0, state.generatingBalanceData.length - 1),
 	},
 	modules: {
 	}

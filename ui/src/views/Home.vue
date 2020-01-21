@@ -23,7 +23,7 @@
 					:to="{ name: 'peers' }"
 				>
 					<v-card-title>
-						<span class="subtitle-1">Total number of nodes</span>
+						<span class="subtitle-1">Number of nodes</span>
 					</v-card-title>
 					<v-card-text>
 						<PreviewChartPeers/>
