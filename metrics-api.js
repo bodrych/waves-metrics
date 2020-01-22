@@ -106,3 +106,24 @@ app.get('/balance', async (req, res) => {
 		res.status(500).send(e.stack)
 	}
 })
+
+app.get('/status', async (req, res) => {
+	try {
+		const peers = (await influx.query(
+			`select last(amount) as value from "2h".peers`
+		)).value;
+		const balance = (await influx.query(
+			`select round(sum(mean)) as value from (select mean(generatingBalance) from blocks where time > now() - 1d group by generator)`
+		)).value;
+		const txs = (await influx.query(
+			`select sum(transactionCount) as value from blocks where time > now() - 1d`
+		)).value;
+		const delay = (await influx.query(
+			`select round(mean(elapsed)) as value from (select elapsed(height)/1000000000 from blocks where time > now() - 7d)`
+		)).value;
+		const data = { peers, balance, txs, delay };
+		res.json(data);
+	} catch (e) {
+		res.status(500).send(e.stack)
+	}
+})
