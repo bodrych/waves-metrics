@@ -3,7 +3,6 @@
     <v-app-bar
       short
       app
-      clipped-left
     >
       <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"/> -->
       <v-toolbar-title
@@ -46,6 +45,11 @@
     <v-content>
       <RouterView/>
     </v-content>
+
+    <!-- <v-footer app padless class="d-flex justify-center font-weight-light">
+      <v-btn icon class="mr-1"><v-icon x-small>mdi-close</v-icon></v-btn>
+      <span>You can lease or donate to 3PPPPPPPVf4pL5iMuncHao8bw3ZwNQVCtaf to support the project</span>
+    </v-footer> -->
   </v-app>
 </template>
 

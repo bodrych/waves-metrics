@@ -121,7 +121,10 @@ app.get('/status', async (req, res) => {
 		const delay = _.head(await influx.query(
 			`select round(mean(elapsed)) as value from (select elapsed(height)/1000000000 from blocks where time > now() - 7d)`
 		)).value;
-		const data = { peers, balance, txs, delay };
+		const profit = _.head(await influx.query(
+			`select sum(a)/sum(b)*52 as value from (select sum(a) as a, mean(b) as b from (select reward+totalFee as a, generatingBalance as b from blocks where time > now() - 7d group by generator) group by generator)`
+		)).value;
+		const data = { peers, balance, txs, delay, profit };
 		res.json(data);
 	} catch (e) {
 		res.status(500).send(e.stack)
