@@ -2,6 +2,12 @@ const Influx = require('influx');
 const http = require('http');
 const _ = require('lodash');
 const app = require('express')();
+const axios = require('axios)');
+
+const getHeight = async () => {
+	const response = await axios.get('http://localhost:6869/blocks/height');
+	return response.data.height;
+}
 
 const influx = new Influx.InfluxDB({
 	host: 'localhost',
@@ -124,7 +130,8 @@ app.get('/status', async (req, res) => {
 		const profit = _.head(await influx.query(
 			`select sum(a)/sum(b)*52 as value from (select sum(a) as a, mean(b) as b from (select reward+totalFee as a, generatingBalance as b from blocks where time > now() - 7d group by generator) group by generator)`
 		)).value;
-		const data = { peers, balance, txs, delay, profit };
+		const height = await getHeight();
+		const data = { peers, balance, txs, delay, profit, height };
 		res.json(data);
 	} catch (e) {
 		res.status(500).send(e.stack)

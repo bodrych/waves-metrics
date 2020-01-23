@@ -28,3 +28,12 @@ export const fetchGeneratingBalanceData = async () => {
 		return [];
 	}
 }
+
+export const fetchStatusData = async () => {
+	try {
+		const response = await axios.get(apiBase + 'status');
+		return response.data;
+	} catch (e) {
+		return {};
+	}
+}

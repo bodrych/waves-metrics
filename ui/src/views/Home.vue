@@ -1,10 +1,10 @@
 <template>
 	<v-container>
-		<!-- <v-row>
+		<v-row>
 			<v-col>
-				<span class="overline">Blockchain Data</span>
+				<status />
 			</v-col>
-		</v-row> -->
+		</v-row>
 		<v-row>
 			<v-col cols="12" sm="6" md="4">
 				<v-card
@@ -47,9 +47,10 @@
 </template>
 
 <script>
-	import PreviewChartPool from '@/components/PreviewChartPool.vue'
-	import PreviewChartPeers from '@/components/PreviewChartPeers.vue'
-	import PreviewChartBalance from '@/components/PreviewChartBalance.vue'
+	import PreviewChartPool from '@/components/PreviewChartPool'
+	import PreviewChartPeers from '@/components/PreviewChartPeers'
+	import PreviewChartBalance from '@/components/PreviewChartBalance'
+	import Status from '@/components/Status'
 
 	export default {
 		name: 'home',
@@ -57,11 +58,9 @@
 			PreviewChartPool,
 			PreviewChartPeers,
 			PreviewChartBalance,
+			Status,
 		},
 		computed: {
-			tooltip() {
-				return document.ontouchstart === undefined ? 'Click and drag to zoom in. Hold down shift key to pan.' : 'Pinch the chart to zoom in'
-			}
 		}
 	}
 </script>
